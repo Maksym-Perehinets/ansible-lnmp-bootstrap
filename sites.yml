@@ -1,0 +1,8 @@
+---
+ - hosts: all
+   become: true
+   roles:
+     - web_server
+     - bootstrap_docker
+     - render_templates
+  

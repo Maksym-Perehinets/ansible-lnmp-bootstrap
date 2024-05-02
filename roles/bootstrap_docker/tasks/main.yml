@@ -1,0 +1,86 @@
+# Install docker
+
+- set_fact:
+    fred_pass: "{{ lookup('password', '/dev/null length=20 chars=ascii_letters') }}"
+    root_pass: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') }}"
+
+- name: Update packege list and upgrade all packeges (Ubuntu)
+  apt:
+    update_cache: true
+    upgrade: dist
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install dependencies 
+  apt: 
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - software-properties-common
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Create directory for Docker's GPG key (Ubuntu)
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Add Docker's official GPG key (Ubuntu)
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    keyring: /etc/apt/keyrings/docker.gpg
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Add Docker repository (Ubuntu)
+  apt_repository:
+    repo: >-
+      deb [arch={{ ansible_architecture }}
+      signed-by=/etc/apt/keyrings/docker.gpg]
+      https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+    filename: docker
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install Docker and related packages
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: true
+  when: ansible_distribution == 'Ubuntu'
+  notify:
+    - enable_docker
+
+
+- name: Add Docker group
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: Add user to Docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true
+
+# - name: Spin up mysql in docker 
+- name: Create a data container
+  docker_container:
+    name: mysqldb
+    image: mysql
+    restart_policy: unless-stopped
+    env: 
+      MYSQL_USER: "fred"
+      MYSQL_PASSWORD: fred_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+  notify: send_notify_to_telegram
+
+
+    

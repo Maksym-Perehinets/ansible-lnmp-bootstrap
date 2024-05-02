@@ -1,0 +1,9 @@
+users:
+  test_1: 
+    password: $2y$05$FxH6cLDjqVg7sIpxsVfZY.AiGC/tkJmNR1.6Q4UW513L6IuD5WOGy # password_1
+  maksym: 
+    password: $2y$05$W4LbirR9/1b3wzKeWOvl3e/qNhO0P4JIQLQyo5xKDYnDRLj32JRUO # 123456
+  user_user: 
+    password: $2y$05$m0bl/u1vUX71bBWE.HdnHuskAOIo4wpak4dkCQU/P.ElCPriRdl0u #_user_
+
+endpoint: secret

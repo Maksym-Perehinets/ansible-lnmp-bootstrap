@@ -1,0 +1,11 @@
+# start and enable services
+- name: restart_nginx
+  service:
+    name: "nginx"
+    state: restarted
+
+# enable nignx
+- name: enable_nginx
+  service:
+    name: "nginx"
+    state: enabled

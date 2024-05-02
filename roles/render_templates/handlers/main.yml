@@ -1,0 +1,5 @@
+# start and enable services
+- name: restart_nginx
+  service:
+    name: "nginx"
+    state: restarted

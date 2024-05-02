@@ -1,0 +1,20 @@
+# enable docker
+- name: enable_docker
+  service:
+    name:
+      - docker.service
+      - containerd.service
+    enabled: true
+    state: started
+
+- name: send_notify_to_telegram
+  community.general.telegram:
+    token: '6597352501:AAGPVwNlkDduA51xQ7Di4w66tM0SkPG4D3s'
+    api_args:
+      chat_id: -4194887081
+      parse_mode: "markdown"
+      text: "Mysql db setd up on  {{ ansible_distribution }}, \n
+             Fred password {{ fred_pass }} \n 
+             root password {{ root_pass }}"
+      disable_web_page_preview: true
+      disable_notification: false

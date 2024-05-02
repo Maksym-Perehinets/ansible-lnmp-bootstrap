@@ -1,0 +1,23 @@
+# Install apache or nginx server alongside with php-fpm into your server
+- name: install nginx and php-fpm (Ubuntu)
+  apt:
+    pkg:
+      - nginx
+      - php-fpm
+    state: latest
+    update_cache: yes
+    default_release: '{{ ansible_lsb.codename }}'
+    allow_unauthenticated: yes
+  when: ansible_distribution == 'Ubuntu'
+  notify:
+    - restart_nginx
+    - enable_nginx
+
+- name: Update firewall policy (Ubuntu)
+  community.general.ufw:
+    rule: "allow"
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+    - "80"
+  when: ansible_distribution == 'Ubuntu'

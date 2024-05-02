@@ -1,0 +1,44 @@
+- name: Ensure endpoint directory exists if not create 
+  file:
+    path: /var/www/html/{{ endpoint }}
+    state: directory
+    group: root
+    owner: root
+    mode: '0755'
+
+- name: Ensure basic auth directory exists if not create 
+  file:
+    path: /etc/nms/nginx
+    state: directory
+    group: root
+    owner: root
+    mode: '0755'
+
+- name: index.html from template
+  ansible.builtin.template:
+    src: templates/secure_site.j2
+    dest: /var/www/html/{{ endpoint }}/index.html
+    owner: root
+    mode: '0644'
+
+- name: htpasswd from template
+  ansible.builtin.template:
+    src: templates/htpasswd.j2
+    dest: /etc/nms/nginx/htpasswd
+    owner: root
+    mode: '0644'
+
+- name: defaul from sites-available not from template for now
+  ansible.builtin.template:
+    src: templates/htpasswd.j2
+    dest: /etc/nms/nginx/htpasswd
+    owner: root
+    mode: '0644'
+
+- name: defaul from sites-available not from template for now
+  ansible.builtin.template:
+    src: templates/default.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    mode: '0644'
+  notify: restart_nginx
