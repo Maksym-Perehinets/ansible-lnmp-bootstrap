@@ -9,7 +9,7 @@
 
 - name: send_notify_to_telegram
   community.general.telegram:
-    token: '6597352501:AAGPVwNlkDduA51xQ7Di4w66tM0SkPG4D3s'
+    token: '6597352501:AAGPVwNlkDduA51xQ7Di4w66tM0SkPG4D3s' # not working because it was used for testing and now deleted
     api_args:
       chat_id: -4194887081
       parse_mode: "markdown"
